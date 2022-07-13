@@ -66,7 +66,8 @@ class KategoriController extends Controller
      */
     public function edit($id)
     {
-        //
+        $kategori = Kategori::where('id',$id)->first();
+        return view('admin.kategori.edit', compact('kategori'));
     }
 
     /**
@@ -78,7 +79,17 @@ class KategoriController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validated = $request->validate([
+            'nama' => 'required|unique:kategoris'
+        ]);
+
+        $data = [
+            'nama' => $request->nama,
+        ];
+
+        Kategori::where('id',$id)->update($data);
+
+        return redirect()->route('kategori.index');
     }
 
     /**
@@ -89,6 +100,8 @@ class KategoriController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Kategori::destroy($id);
+        return redirect()->route('kategori.index');
+
     }
 }
